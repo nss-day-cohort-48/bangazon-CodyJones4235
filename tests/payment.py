@@ -40,4 +40,16 @@ class PaymentTests(APITestCase):
         self.assertEqual(json_response["expiration_date"], "2024-12-31")
         self.assertEqual(json_response["create_date"], str(datetime.date.today()))
 
-    # TODO: Delete payment type
+    def test_delete_payment_type(self):
+        """
+        Ensure we can delete a payment type.
+        """
+        self.test_create_payment_type()
+
+        # Remove paymenttype
+        url = "/paymenttype/1"
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
+        response = self.client.delete(url, format='json')
+
+        # Test that payment type was deleted
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
